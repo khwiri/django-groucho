@@ -2,7 +2,7 @@ import random
 import logging
 from django import forms
 from django.db import transaction
-from groucho.models import AttemptUser, AttemptSource, Configuration
+from groucho.models import AttemptUser, AttemptSource, Configuration, ProtectedUser
 
 logger = logging.getLogger(__name__)
 
@@ -26,15 +26,27 @@ class LoginForm(forms.ModelForm):
             return self.configuration.invalid_user_message
         
         return self.configuration.invalid_password_message
-        
-        
+
+
+    def is_protected_username(self, username):
+        return ProtectedUser.objects.filter(username=username).exists()
+
+
     @transaction.atomic
     def get_user(self, username, source_ip):
         try:
             user = None
-        
+            protected = self.is_protected_username(username)
+            
             try:
                 user = AttemptUser.objects.get(username=username)
+                
+                # Regardless of what was previously said for this user,
+                # switch them so they don't exist when protected.
+                if protected:
+                    user.exists = False
+                    user.save()
+
             except AttemptUser.DoesNotExist:
                 exists = False
 
@@ -44,8 +56,10 @@ class LoginForm(forms.ModelForm):
                 # this could be a more sophisticated check where certain non-alphanumeric
                 # characters are also okay, and that it matches a certain pattern.
                 # The application could offer configuration for different types of
-                # username patterns like only digits for certain situations.
-                if username.isalpha():
+                # username patterns like only digits for certain situations. This
+                # also only randomizes whether the user exists for non-protected
+                # users.
+                if username.isalpha() and not protected:
                     exists = self.randomize_user_existence()
 
                 user = AttemptUser.objects.create(username=username, exists=exists)

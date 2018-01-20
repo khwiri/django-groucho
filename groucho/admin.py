@@ -1,6 +1,6 @@
 from django.contrib import admin
 from django.contrib.admin import AdminSite
-from groucho.models import AttemptUser, AttemptSource, Configuration
+from groucho.models import AttemptUser, AttemptSource, Configuration, ProtectedUser
 
 @admin.register(Configuration)
 class ConfigurationAdmin(admin.ModelAdmin):
@@ -29,3 +29,7 @@ class AttemptUserAdmin(admin.ModelAdmin):
 @admin.register(AttemptSource)
 class AttemptSourceAdmin(admin.ModelAdmin):
     list_display = ['ip', 'credentials']
+
+@admin.register(ProtectedUser)
+class ProtectedUserAdmin(admin.ModelAdmin):
+    pass
