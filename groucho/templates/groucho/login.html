@@ -1,5 +1,19 @@
-<form action="{% url 'groucho-login' %}" method="post">
-    {% csrf_token %}
-    {{ form }}
-    <input type="submit" value="Submit" />
-</form>
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Groucho Login</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
+        <link rel="stylesheet" href="{{STATIC_URL}}groucho/css/groucho.css">
+    </head>
+    <body>
+        <div class="content">
+            <form action="{% url 'groucho-login' %}" method="post">
+                {% csrf_token %}
+                {{ form }}
+                <input type="submit" value="Submit" />
+            </form>
+        </div>
+
+        <!-- <script type="text/javascript" src="{{STATIC_URL}}khwiri/js/khwiri.min.js"></script> -->
+    </body>
+</html>

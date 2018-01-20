@@ -1,0 +1,4 @@
+html { 
+    background: url(../img/background.jpg) no-repeat center center fixed; 
+    @include background-size(cover);
+}
