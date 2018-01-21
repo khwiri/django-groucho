@@ -1,0 +1,142 @@
+{% extends "admin/change_list.html" %}
+
+{% block extrahead %}
+    {{ block.super }}
+    <script type="text/javascript" src="{{STATIC_URL}}groucho/js/groucho.min.js"></script>
+    
+{% endblock extrahead %}
+
+{% block content_title %}
+    <h1>Source Summary</h1>
+{% endblock content_title %}
+
+{% block result_list %}
+    <div class="results_container" style="xwidth: 1000px; xmargin: 0 auto; display: flex;">
+        <div class="results_summary">
+            <div class="results_chart" style="margin-bottom: 20px;">
+                <canvas id="summary_doughnut" height="200"></canvas>
+            </div>
+            <div class="results" style="width: 400px;">
+                <table id="result_list">
+                    <thead>
+                        <tr>
+                            <th>
+                                <div class="text">
+                                    <a href="#">Source IP</a>
+                                </div>
+                            </th>
+                            <th>
+                                <div class="text">
+                                    <a href="#">Requests</a>
+                                </div>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for source in summary %}
+                            <tr>
+                                <td><a class="source_ip" href="javascript:void(0)" data-ip="{{source.ip}}" data-index="{{forloop.counter0}}">{{source.ip}}</a></td>
+                                <td>{{source.ip__count}}</td>
+                            </tr>
+                        {% endfor %}
+                        <tr style="font-weight: bold;">
+                            <td><a class="total_ip" href="javascript:void(0)">Total</a></td>
+                            <td>{{summary_total}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="historical_chart" style="margin-left: 40px;">
+            <canvas id="source_history" width="800"></canvas>
+        </div>
+    </div>
+
+    <script>
+        (function($) {
+            var sourceTotalColor = '#555555CC';
+            var sourceBreakdownColors = ['#E15554CC', '#E1BC29CC', '#3BB273CC', '#7768AECC', '#3590F3CC'];
+
+            var updateHistoricalChart = function(index, sourceIP) {
+                $.get('{% url 'groucho-source-history' %}', {ip: sourceIP}, function(data) {
+                    var color = sourceTotalColor;
+                    if(index < sourceBreakdownColors.length)
+                        color = sourceBreakdownColors[index];
+
+                    historicalChart.data.datasets[0].label = 'Source IP - ' + sourceIP;
+                    historicalChart.data.datasets[0].borderColor = [color];
+                    historicalChart.data.datasets[0].backgroundColor = [color];
+                    historicalChart.data.datasets[0].data = [];
+                    historicalChart.data.labels = [];
+                    $(data.days).each(function(index, day) {
+                        historicalChart.data.datasets[0].data.push(day.requests);
+                        historicalChart.data.labels.push(day.day);
+                    });
+
+                    historicalChart.update();
+                }).fail(function() {
+                    alert('Failed to retrieve data');
+                });
+            };
+
+            var summaryDoughnutContext = document.getElementById('summary_doughnut').getContext('2d');
+            var summaryDoughnut = new Chart(summaryDoughnutContext, {
+                type: 'doughnut',
+                data: {
+                    datasets: [{
+                        data: [
+                            {% for source in summary|slice:":5" %}
+                                {{source.ip__count}},
+                            {% endfor %}
+                        ],
+                        backgroundColor: sourceBreakdownColors
+                    }],
+                    labels: [
+                        {% for source in summary|slice:":10" %}
+                            '{{source.ip}}',
+                        {% endfor %}
+                    ],
+                },
+                options: {
+                    onClick: function(event, item) {
+                        updateHistoricalChart(item[0]._index, item[0]._model.label);
+                    },
+                    legend: {
+                        position: 'bottom'
+                    }
+                }
+            });
+
+            var historicalChart = new Chart(document.getElementById('source_history').getContext('2d'), {
+                type: 'line',
+                data: {
+                    datasets: [{
+                        data: [{% for day in history %}{{day.day__count}},{% endfor %}],
+                        backgroundColor: [sourceTotalColor],
+                        borderColor: [sourceTotalColor],
+                        label: 'Total Requests',
+                        fill: false
+                    }],
+                    labels: [
+                        {% for day in history %}
+                            '{{day.day|date:"M d, Y"}}',
+                        {% endfor %}
+                    ]
+                }
+            });
+
+            $('.source_ip').click(function() {
+                updateHistoricalChart(
+                    $(this).data('index'),
+                    $(this).data('ip')
+                );
+            });
+
+            $('.total_ip').click(function() {
+                updateHistoricalChart();
+            });
+        })(django.jQuery);
+    </script>
+{% endblock %}
+
+{% block pagination %}{% endblock %}
