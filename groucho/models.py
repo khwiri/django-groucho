@@ -33,3 +33,10 @@ class ProtectedUser(models.Model):
 
     def __str__(self):
         return self.username
+
+
+class SourceSummary(AttemptSource):
+    class Meta:
+        proxy = True
+        verbose_name = 'Source Summary'
+        verbose_name_plural = 'Source Summary'

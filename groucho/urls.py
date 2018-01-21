@@ -20,4 +20,5 @@ from groucho import views
 
 urlpatterns = [
     url(r'^$', views.login, name='groucho-login'),
+    url(r'^source-history$', views.source_history, name='groucho-source-history'),
 ]
