@@ -7,11 +7,29 @@
     </head>
     <body>
         <div class="content">
-            <form action="{% url 'groucho-login' %}" method="post">
-                {% csrf_token %}
-                {{ form }}
-                <input type="submit" value="Submit" />
-            </form>
+            <div class="product">
+                <img src="{{STATIC_URL}}groucho/img/logo.png"/>
+                <div class="title">Enterprise Portal</div>
+            </div>
+            <div class="login">
+                <form action="{% url 'groucho-login' %}" method="post">
+                    {% csrf_token %}
+                
+                    {{ form.non_field_errors }}
+                    <div class="fieldWrapper">
+                        {{ form.username.errors }}
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        <div>{{ form.username }}</div>
+                    </div>
+                    <div class="fieldWrapper">
+                        {{ form.password.errors }}
+                        <label for="{{ form.message.id_for_label }}">Password</label>
+                        <div>{{ form.password }}</div>
+                    </div>
+
+                    <input class="login-button button" type="submit" value="Login"/>
+                </form>
+            </div>
         </div>
     </body>
 </html>

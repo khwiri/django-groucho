@@ -8,7 +8,7 @@ logger = logging.getLogger(__name__)
 
 
 class LoginForm(forms.ModelForm):
-    password = forms.CharField(max_length=100)
+    password = forms.CharField(widget=forms.PasswordInput(), max_length=100)
 
     def __init__(self, *args, source_ip=None, **kwargs):
         self.source_ip = source_ip
