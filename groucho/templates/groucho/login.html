@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <title>Groucho Login</title>
+        <title>Portal Login</title>
         <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
         <link rel="stylesheet" href="{{STATIC_URL}}groucho/css/groucho.css">
     </head>
@@ -13,21 +13,23 @@
             </div>
             <div class="login">
                 <form action="{% url 'groucho-login' %}" method="post">
-                    {% csrf_token %}
-                
-                    {{ form.non_field_errors }}
-                    <div class="fieldWrapper">
-                        {{ form.username.errors }}
-                        <label for="{{ form.username.id_for_label }}">Username</label>
-                        <div>{{ form.username }}</div>
+                    <div class="fields">
+                        {% csrf_token %}
+                        {{ form.non_field_errors }}
+                        <div class="field">
+                            <label for="{{ form.username.id_for_label }}">Username</label>
+                            <div>{{ form.username }}</div>
+                            {{ form.username.errors }}
+                        </div>
+                        <div class="field">
+                            <label for="{{ form.message.id_for_label }}">Password</label>
+                            <div>{{ form.password }}</div>
+                            {{ form.password.errors }}
+                        </div>
                     </div>
-                    <div class="fieldWrapper">
-                        {{ form.password.errors }}
-                        <label for="{{ form.message.id_for_label }}">Password</label>
-                        <div>{{ form.password }}</div>
+                    <div "submit-row">
+                        <input class="login-button button" type="submit" value="Login"/>
                     </div>
-
-                    <input class="login-button button" type="submit" value="Login"/>
                 </form>
             </div>
         </div>

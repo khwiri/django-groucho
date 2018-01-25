@@ -1,4 +1,25 @@
 html { 
-    background: url(../img/background.jpg) no-repeat center center fixed; 
+    font-family: Arial, sans-serif;
+    background: url(../img/background.jpg) no-repeat center center fixed;
     @include background-size(cover);
+}
+
+input {
+    border: 2px solid $input-border-color;
+    padding: 10px 15px;
+    height: 45px;
+    font-size: 20px;
+    color: $input-text-color;
+    box-sizing: border-box;
+    transition: border-color ease-in-out .15s;
+    border-radius: 4px;
+
+    &:focus {
+        outline: 0;
+        border-color: $input-focus-border-color;
+    }
+
+    &::placeholder {
+        color: $input-placeholder-color;
+    }
 }
