@@ -1,6 +1,33 @@
-.content {
-    width: 800px;
-    height: 400px;
-    margin: 100px auto;
-    background-color: #fff;
+.button {
+    position: relative;
+    background-color: $button-default-background-color;
+    color: $white-color;
+    cursor: pointer;
+    user-select: none;
+    padding: 12px;
+    border: 0;
+    outline: none;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    transition: background-color 200ms linear;
+    // box-shadow: 1px 1px 4px #333;
+
+    &.primary {
+        background-color: $button-primary-background-color;
+        color: $white-color;
+
+        &:hover {
+            background-color: darken($button-primary-background-color, 10%);
+        }
+    }
+
+    &:hover {
+        background-color: darken($button-default-background-color, 10%);
+    }
+
+    &:active {
+        top: 2px;
+        // box-shadow: none;
+    }
 }

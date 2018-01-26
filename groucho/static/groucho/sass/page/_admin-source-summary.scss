@@ -1,0 +1,19 @@
+.source-summary-page {
+    display: flex;
+
+    .results_chart {
+        margin-bottom: 20px;
+    }
+
+    .results {
+        width: 400px;
+
+        .total-row {
+            font-weight: bold;
+        }
+    }
+
+    .historical_chart {
+        margin-left: 40px;
+    }
+}
