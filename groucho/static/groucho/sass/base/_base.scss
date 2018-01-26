@@ -1,7 +1,7 @@
 html { 
     font-family: Arial, sans-serif;
     background: url(../img/background.jpg) no-repeat center center fixed;
-    @include background-size(cover);
+    background-size: cover;
 }
 
 input {
@@ -22,4 +22,9 @@ input {
     &::placeholder {
         color: $input-placeholder-color;
     }
+}
+
+label {
+    font-weight: bold;
+    color: $input-label-color;
 }

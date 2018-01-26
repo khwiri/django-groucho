@@ -1,37 +1,31 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <title>Portal Login</title>
-        <meta name="viewport" content="width=device-width, initial-scale=1, user-scalable=no">
-        <link rel="stylesheet" href="{{STATIC_URL}}groucho/css/groucho.css">
-    </head>
-    <body>
-        <div class="content">
-            <div class="product">
-                <img src="{{STATIC_URL}}groucho/img/logo.png"/>
-                <div class="title">Enterprise Portal</div>
-            </div>
-            <div class="login">
-                <form action="{% url 'groucho-login' %}" method="post">
-                    <div class="fields">
-                        {% csrf_token %}
-                        {{ form.non_field_errors }}
-                        <div class="field">
-                            <label for="{{ form.username.id_for_label }}">Username</label>
-                            <div>{{ form.username }}</div>
-                            {{ form.username.errors }}
-                        </div>
-                        <div class="field">
-                            <label for="{{ form.message.id_for_label }}">Password</label>
-                            <div>{{ form.password }}</div>
-                            {{ form.password.errors }}
-                        </div>
-                    </div>
-                    <div "submit-row">
-                        <input class="login-button button" type="submit" value="Login"/>
-                    </div>
-                </form>
-            </div>
+{% extends "groucho/base.html" %}
+
+{% block content %}
+    <div class="login-page">
+        <div class="product">
+            <img src="{{STATIC_URL}}groucho/img/logo.png"/>
+            <div class="title">Enterprise Portal</div>
         </div>
-    </body>
-</html>
+        <div class="login">
+            <form action="{% url 'groucho-login' %}" method="post">
+                <div class="fields">
+                    {% csrf_token %}
+                    {{ form.non_field_errors }}
+                    <div class="field {% if form.username.errors %}error{% endif %}">
+                        <label for="{{ form.username.id_for_label }}">Username</label>
+                        <div>{{ form.username }}</div>
+                        {{ form.username.errors }}
+                    </div>
+                    <div class="field {% if form.password.errors %}error{% endif %}">
+                        <label for="{{ form.password.id_for_label }}">Password</label>
+                        <div>{{ form.password }}</div>
+                        {{ form.password.errors }}
+                    </div>
+                </div>
+                <div "submit-row">
+                    <input class="button" type="submit" value="Login"/>
+                </div>
+            </form>
+        </div>
+    </div>
+{% endblock content %}
