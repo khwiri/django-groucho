@@ -16,7 +16,7 @@ def forward_func(apps, schema_editor):
 
 
 def reverse_func(apps, schema_editor):
-    Configuration = apps.get_model('groucho', 'Configuratino')
+    Configuration = apps.get_model('groucho', 'Configuration')
     db_alias = schema_editor.connection.alias
     Configuration.objects.using(db_alias).all().delete()
 
