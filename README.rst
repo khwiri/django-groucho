@@ -1,7 +1,7 @@
 django-groucho
 =================
 
-A django application providing a simple login page which fakes the existance of users through bad error messages such as *Unknown user* or *Password incorrect*.  This type of deception can be used for logging and alerting by feeding this data to other systems.
+A django application providing a simple login page which fakes the existence of users through bad error messages such as *Unknown user* or *Password incorrect*.  This type of deception can be used for logging and alerting by feeding this data to other systems.
 
 Requirements
 -----------------
